@@ -69,6 +69,7 @@ function Client(target, options) {
   this.rfc3164 = typeof options.rfc3164 === 'boolean' ? options.rfc3164 : true;
 	this.appName = options.appName || process.title.substring(process.title.lastIndexOf("/")+1, 48);
     this.dateFormatter = options.dateFormatter || function() { return this.toISOString(); };
+	this.messageFormatter = options.messageFormatter ;
 
 	this.transport = Transport.Udp;
 	if (options.transport &&
@@ -82,6 +83,10 @@ function Client(target, options) {
 util.inherits(Client, events.EventEmitter);
 
 Client.prototype.buildFormattedMessage = function buildFormattedMessage(message, options) {
+	if(typeof options.messageFormatter !== 'undefined'){
+		return options.messageFormatter(message, options);
+	}
+	
 	// Some applications, like LTE CDR collection, need to be able to
 	// back-date log messages based on CDR timestamps across different
 	// time zones, because of delayed record collection with 3rd parties.
