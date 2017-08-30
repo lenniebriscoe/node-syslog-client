@@ -84,7 +84,7 @@ util.inherits(Client, events.EventEmitter);
 
 Client.prototype.buildFormattedMessage = function buildFormattedMessage(message, options) {
 	if(typeof options.messageFormatter !== 'undefined'){
-		return options.messageFormatter(message, options);
+		return new Buffer(options.messageFormatter(message, options));
 	}
 	
 	// Some applications, like LTE CDR collection, need to be able to
