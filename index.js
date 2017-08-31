@@ -66,9 +66,10 @@ function Client(target, options) {
 	this.getTransportRequests = [];
 	this.facility = options.facility || Facility.Local0;
 	this.severity =	options.severity || Severity.Informational;
-  this.rfc3164 = typeof options.rfc3164 === 'boolean' ? options.rfc3164 : true;
+  	this.rfc3164 = typeof options.rfc3164 === 'boolean' ? options.rfc3164 : true;
 	this.appName = options.appName || process.title.substring(process.title.lastIndexOf("/")+1, 48);
-    this.dateFormatter = options.dateFormatter || function() { return this.toISOString(); };
+	this.dateFormatter = options.dateFormatter || function() { return this.toISOString(); };
+	
 	this.messageFormatter = options.messageFormatter ;
 
 	this.transport = Transport.Udp;
@@ -83,8 +84,8 @@ function Client(target, options) {
 util.inherits(Client, events.EventEmitter);
 
 Client.prototype.buildFormattedMessage = function buildFormattedMessage(message, options) {
-	if(typeof options.messageFormatter !== 'undefined'){
-		return new Buffer(options.messageFormatter(message, options));
+	if(typeof this.messageFormatter !== 'undefined'){
+		return new Buffer(this.messageFormatter(message, options));
 	}
 	
 	// Some applications, like LTE CDR collection, need to be able to
@@ -198,7 +199,10 @@ Client.prototype.log = function log() {
   if (typeof options.syslogHostname === "undefined") {
     options.syslogHostname = this.syslogHostname;
   }
-
+//   console.log('logging - ' + options.messageFormatter)
+//   if (typeof options.messageFormatter !== "undefined") {
+//     options.messageFormatter = this.messageFormatter;
+//   }
 	var fm = this.buildFormattedMessage(message, options);
 
 	var me = this;
