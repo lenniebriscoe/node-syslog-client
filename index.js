@@ -168,12 +168,17 @@ Client.prototype.close = function close() {
 
 Client.prototype.log = function log() {
 	var message, options = {}, cb;
-
-	if (typeof arguments[0] === "string")
-		message = arguments[0];
-	else
-		throw new Error("first argument must be string");
-
+	
+	if(typeof this.messageFormatter === "undefined"){
+		if (typeof arguments[0] === "string")
+			message = arguments[0];
+		else
+			throw new Error("first argument must be string");	
+	}
+	else if (typeof this.messageFormatter === "function"){
+		message = arguments[0];	
+	}
+		
 	if (typeof arguments[1] === "function")
 		cb = arguments[1];
 	else if (typeof arguments[1] === "object")
